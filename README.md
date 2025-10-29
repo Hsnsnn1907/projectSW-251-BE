@@ -1,0 +1,10 @@
+npm init -y
+npm install bcrypt 
+npm install    cookie-parser
+    npm install cors
+    npm install crud
+    npm install dotenv
+    npm install express
+     npm install jsonwebtoken
+    npm install mongoose
+     npm install nanoid
