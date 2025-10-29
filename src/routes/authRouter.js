@@ -11,4 +11,6 @@ authRouter.post("/login", requireCsrf, authController.loginMethod);
 authRouter.post("/refresh", authController.refreshMethod);
 authRouter.post("/logout", requireCsrf, authController.logoutMethod);
 authRouter.get("/me", requireAuth, authController.meMethod); 
+authRouter.post("/verify-email", authController.verifyEmail);
+authRouter.post("/resend-verification", requireCsrf, authController.resendVerification);
 export default authRouter;
