@@ -5,6 +5,8 @@ import programRegistration from "../model/programRegistration.js";
 import TutorProfile from "../model/tutor.js";
 import Session from "../model/session.js";
 import Feedback from "../model/feedback.js";
+import { createNotification } from "../services/notificationService.js";
+
 
 // GET /tutors
 export async function listTutors(req, res) {
@@ -136,8 +138,23 @@ export async function scheduleSession(req, res) {
       status: "PENDING",
     });
 
+    const tutorProfile = await TutorProfile.findById(tutorId);
+    
+    // Gửi thông báo cho Tutor
+    if (tutorProfile && tutorProfile.accountId) {
+      await createNotification({
+        userId: tutorProfile.accountId, // ID tài khoản của Tutor
+        title: "Yêu cầu đặt lịch mới",
+        message: `Sinh viên vừa đặt lịch môn ${subject} vào lúc ${start.toLocaleString()}.`,
+        type: "INFO",
+        link: "/pending", // Link đến trang duyệt lịch của Tutor
+        emailContent: `<p>Bạn có yêu cầu lịch học mới môn <b>${subject}</b>.</p><p>Thời gian: ${start.toLocaleString()}</p><p>Vui lòng vào hệ thống để xác nhận.</p>`
+      });
+    }
     console.log(" Session created successfully:", session._id);
     
+
+
     return res.status(201).json({ 
       sessionId: session._id,
       message: "Session scheduled successfully"
